@@ -1,0 +1,146 @@
+<!-- Header of Phasemanagement -->
+
+<div class="row">
+    <div class="col-2"></div>
+
+    <div class="col-8">
+        <h2 id="bp-configevent" class="text-center">Phasenverwaltung</h2>
+        <script type="text/javascript">
+            $("#bp-configevent").text(i18n("phaseManagement"));
+        </script>
+    </div>
+
+    <div class="col-2 text-align-center">
+        <button type="button" class="close" aria-label="Close" onclick="util.clickClose()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>
+
+
+<!-- Choose and create phase -->
+<div class="form-group row">
+    <div class="col-3">
+        <label id="bp-phaseselect-lbl" class="col-form-label" for="bp-phaseselect">Phase:</label>
+        <script type="text/javascript">
+            $("#bp-phaseselect-lbl").text(i18n("Phase") + ":");
+        </script>
+    </div>
+    <div class="input-group col-9">
+        <select name="phase" class="custom-select" id="bp-phaseselect"></select>
+        <div class="input-group-append">
+            <button id="btnCreatePhase" class="btn btn-warning" type="button" onclick="clickNewPhase()">Phase erstellen</button>
+            <script type="text/javascript">
+                $("#btnCreatePhase").text(i18n("createPhase"));
+            </script>
+        </div>
+    </div>
+</div>
+
+<!-- Shift Phase -->
+<div class="form-group row">
+    <div class="col-3">
+        <label id="shiftPhaseLblPoit" class="col-form-label" for="timeshift">Zeitpunkt:</label>
+        <script type="text/javascript">
+            $("#shiftPhaseLblPoit").text(i18n("PointInTime") + ":");
+        </script>
+    </div>
+
+    <div class="col-12">
+        <div class="input-group" id="timeshift">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary" id="sign" onclick="togglePlusMinus(this)" data-toggle="tooltip"
+                        title="Vorzeichen" value="1"><i class="fa fa-plus"></i></button>
+                <script type="text/javascript">
+                    $("#sign").title = i18n("sign");
+                </script>
+            </div>
+            <input id="rd" class="form-control" data-toggle="tooltip" type="number" title="Tage"
+                   placeholder="Tage" min="0" required/>
+            <input id="rh" class="form-control" data-toggle="tooltip" type="number" title="Stunden"
+                   placeholder="Std." min="0" max="23" required/>
+            <input id="rm" class="form-control" data-toggle="tooltip" type="number" title="Minuten"
+                   placeholder="Min." min="0" max="59" required/>
+            <input id="rs" class="form-control" data-toggle="tooltip" type="number" title="Sekunden"
+                   placeholder="Sek." min="0" max="59" required/>
+            <script type="text/javascript">
+                $("#rd").prop("title", i18n("days"));
+                $("#rd").prop("placeholder", i18n("days"));
+                $("#rh").prop("title", i18n("hours"));
+                $("#rh").prop("placeholder", i18n("hours"));
+                $("#rm").prop("title", i18n("minutes"));
+                $("#rm").prop("placeholder", i18n("minuteAbbrev"));
+                $("#rs").prop("title", i18n("seconds"));
+                $("#rs").prop("placeholder", i18n("secondAbbrev"));
+            </script>
+            <div class="input-group-append">
+                <button id="shiftBtn" class="btn btn-primary" type="button" onclick="shiftPhase($('#bp-phaseselect').val(),
+                    ($('#rd').val()*86400
+                        + $('#rh').val()*3600 +
+                        $('#rm').val()*60 +
+                        $('#rs').val()*1) * $('#sign').val())">
+                    Verschieben</button>
+                <script>$("#shiftBtn").text(i18n("shift"));</script>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+    </script>
+</div>
+
+<!-- Delete and Discard Phase -->
+
+<div class="form-group row" id="footer">
+    <div class="col-6">
+        <button type="button" class="btn btn-secondary btn-block" id="bp-discardPhase"
+                onclick="discardPhase(parseInt($('#bp-phaseselect').val()))">Phase aufheben</button>
+        <script type="text/javascript">
+            $("#bp-discardPhase").text(i18n("discardPhase"));
+        </script>
+    </div>
+    <div class="col-6">
+        <button type="button" class="btn btn-secondary btn-block" id="bp-deletePhase"
+                onclick="deletePhase(parseInt($('#bp-phaseselect').val()))">Phase löschen</button>
+        <script type="text/javascript">
+            $("#bp-deletePhase").text(i18n("deletePhase"));
+        </script>
+    </div>
+</div>
+
+<!-- Phase Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-phase">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="createPhaseHeader" class="modal-title">Phase erstellen</h5>
+                <script type="text/javascript">
+                    $("#createPhaseHeader").text(i18n("createPhase"));
+                </script>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label id="phaseNameLabel" class="form-label" for="modal-phasename">Phasenname:</label>
+                    <input class="form-control" type="text" id="modal-phasename"
+                           placeholder="Phasennamen hier eingeben" required>
+                    <script type="text/javascript">
+                        $("#phaseNameLabel").text(i18n("phaseName") + ":");
+                        $("#modal-phasename").placeholder = i18n("enterPhaseName");
+                    </script>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="phaseCreateAndClose" type="button" class="btn btn-primary" onclick="createPhase()">Erstellen und schließen
+                </button>
+                <script type="text/javascript">
+                    $("#phaseCreateAndClose").text(i18n("createAndClose"));
+                </script>
+            </div>
+        </div>
+    </div>
+</div>

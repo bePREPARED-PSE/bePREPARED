@@ -1,0 +1,61 @@
+<!-- Config Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-select-phase">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="selectPhasesHeader" class="modal-title">Phasen auswählen:</h5>
+                <script type="text/javascript">
+                    $("#selectPhasesHeader").text(i18n("selectPhases") + ":");
+                </script>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Table  -->
+                <table class="table table-hover">
+                    <!-- Table head -->
+                    <thead>
+                    <tr>
+                        <th>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="all"
+                                       onclick="toggleCheckBoxes(this)">
+                                <label class="custom-control-label label-tabel" for="all"></label>
+                            </div>
+                        </th>
+                        <th id="th-phaseId">Phasen-ID</th>
+                        <th id="th-phaseName">Phasenname</th>
+                    </tr>
+                    </thead>
+
+                    <!-- Table body -->
+                    <tbody id="bp-table-body"></tbody>
+
+                </table>
+
+                <script type="text/javascript">
+                    $("#th-phaseId").text(i18n("phaseId"));
+                    $("#th-phaseName").text(i18n("phaseName"));
+                </script>
+
+                <div class="alert alert-danger collapse" id="noPhaseSelected">
+                    <span id="noPhaseSelectedSpan">Es muss mindestens eine Phase gewählt werden!</span>
+                    <script type="text/javascript">
+                        $("#noPhaseSelectedSpan").text(i18n("mustMinOnePhaseSelected"));
+                    </script>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-block" id="modal-config-save"
+                        onclick="phasesSelected()">Phasen wählen
+                </button>
+                <script type="text/javascript">
+                    $("#modal-config-save").text(i18n("selectPhases"));
+                </script>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,162 @@
+.table {
+    white-space: nowrap; /* gegen Zeilenumbruch in Tabelle */
+}
+
+#middlePanel {
+    overflow-y: auto;
+    height: 100%;
+}
+
+#modal .modal-header {
+    background-color: #ff2218;
+}
+
+#top-line {
+    background-color: #407dff;
+}
+
+#mapid {
+    height: 100%;
+}
+
+#footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+.map-container {
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    position: relative;
+    height: 0;
+}
+
+.map-container iframe {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.modal-header {
+    background-color: #ffdc22;
+}
+
+#btns button {
+    margin-left: 5px;
+}
+
+text {
+    color: white;
+}
+
+#ps, #btns, .my-center {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.card {
+    margin-top: 10px;
+    height: 100%;
+}
+
+.card-title {
+    width: 100%;
+    word-break: break-word;
+    text-align: center;
+    justify-content: center
+}
+
+.card:hover {
+    background-color: #e2e2e2;
+}
+
+.card-container {
+    position: relative;
+    width: 100%;
+}
+
+.card-container:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%; /* The padding depends on the width, not on the height, so with a padding-bottom of 100% you will get a square */
+}
+
+.card-container img {
+    position: absolute; /* Take picture out of the flow */
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0; /* Make the picture taking the size of it's parent */
+    width: 100%; /* This if for the object-fit */
+    height: 100%; /* This if for the object-fit */
+    object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
+    object-position: center;
+}
+
+.nav-link:hover {
+    background-color: rgba(201, 199, 202, 0.5);
+}
+
+a {
+    white-space: nowrap;
+}
+
+a[disabled] {
+    pointer-events: none;
+    cursor: default;
+    color: gray;
+}
+
+#visualization {
+    position: relative;
+}
+
+.menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 5px;
+    margin-right: 20px;
+    z-index: 9999;
+}
+
+.disableRow {
+    background-color: #cccccc;
+    color: #888888;
+}
+
+.markRow {
+    background-color: #fff785;
+}
+
+.vis-item.unselected {
+    background-color: #cccccc;
+    border-color: #b4b4b4;
+}
+
+@media (min-width: 768px) {
+    .modal-xl {
+        width: 90vw;
+    }
+}
+
+.rotate {
+    animation: rotation 2s infinite linear;
+}
+
+.black {
+    filter: invert(100%);
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(359deg);
+    } to {
+        transform: rotate(0deg);
+          }
+}

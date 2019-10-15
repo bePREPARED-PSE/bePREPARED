@@ -1,0 +1,26 @@
+<div class="row align-items-start">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <h2 id="createEventHeader" class="text-center">Ereignis erstellen</h2>
+        <script type="text/javascript">
+            $("#createEventHeader").text(i18n("createEvent"));
+        </script>
+    </div>
+    <div class="col-lg-2 text-align-center">
+        <button type="button" class="close" aria-label="Close" onclick="util.clickClose()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <script type="text/javascript">
+        $("#createEventHeader").text(i18n("createEvent"));
+    </script>
+</div>
+<div class="row">
+    <div class="col-12">
+        <h5 id="eventTypesHeader" class="text-start">Ereignisart:</h5>
+        <script type="text/javascript">
+            $("#eventTypesHeader").text(i18n("EventType") + ":");
+        </script>
+    </div>
+</div>
+<div class="row" id="eventTypeButtons"></div>

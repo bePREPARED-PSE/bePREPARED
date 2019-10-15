@@ -1,0 +1,87 @@
+<!-- Config Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-config">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="configTitle" class="modal-title">Konfiguration</h5>
+                <button onclick="$('#curConfig').text(currentConfig)" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--Input fields:-->
+                <form id="modal-config-form" novalidate>
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <label id="configselect-label" class="col-form-label"
+                                   for="bp-configselect">Konfiguration:</label>
+                        </div>
+                        <div class="input-group col-9">
+                            <select name="phase" class="custom-select" id="bp-configselect"
+                                    onchange="onConfigChange()"></select>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <div id="bp-config">
+                        Loading Input Descriptors...
+                    </div>
+                    <hr>
+
+                    <!-- Time picker:-->
+                    <div class="form-group">
+                        <label id="startPointInTime" class="form-label" for="datetime2">Startzeitpunkt:</label>
+                        <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+
+                            <input name="datetime2" id="datetime2" type="text" class="form-control datetimepicker-input"
+                                   data-target="#datetimepicker2" required>
+                            <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                            <div id="invalidDate" class="invalid-tooltip">
+                                Bitte wähle ein korrektes Datum aus!
+                            </div>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            $('#datetimepicker2').datetimepicker({
+                                format: 'L LTS',
+                                locale: moment.locale(),
+                            });
+                        });
+                    </script>
+                </form>
+
+                <div class="alert alert-danger collapse" id="noConfig">
+                    <span id="configMustExist">Es muss mindestens eine Konfiguration existieren!</span>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="col-6">
+                    <button type="button" class="btn btn-secondary btn-block" id="modal-config-delete"
+                            onclick="deleteConfig()">Konfiguration löschen
+                    </button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary btn-block" id="modal-config-save"
+                            onclick="createConfig()">Änderungen speichern
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- internationalize this modal -->
+    <script type="text/javascript">
+        $("#configTitle").text(i18n("configuration"));
+        $("#configselect-label").text(i18n("configuration") + ":");
+        $("#startPointInTime").text(i18n("startPointInTime"));
+        $("#invalidDate").text(i18n("enterValidDate"));
+        $("#configMustExist").text(i18n("configMustExist"));
+        $("#modal-config-delete").text(i18n("deleteConfiguration"));
+        $("#modal-config-save").text(i18n("saveChanges"));
+    </script>
+</div>

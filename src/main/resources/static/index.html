@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html dir="ltr" style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <title>bePREPARED</title>
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css"/>
+    <link href="lib/datatables-1.10.18/datatables.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="lib/tempusdominus-bootstrap-4.css"/>
+    <link href="lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="icon" type="image/png" href="img/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="lib/vis.min.css"/>
+    <link href="lib/leaflet-1.5.1/leaflet.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/Leaflet.Easybutton/easy-button.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/css/bootstrap-slider.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript" src="lib/i18n.js"></script>
+    <script type="text/javascript" src="lib/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="lib/math.js"></script>
+    <script type="text/javascript" src="js/util.js"></script>
+    <script type="text/javascript" src="js/types.js"></script>
+    <script type="text/javascript" src="js/database.js"></script>
+    <script type="text/javascript" src="js/com-controller.js"></script>
+    <script type="text/javascript" src="js/event-handler/eventmanagement.js"></script>
+    <script type="text/javascript" src="js/event-handler/phasemanagement.js"></script>
+    <script type="text/javascript" src="js/event-handler/simulation.js"></script>
+    <script type="text/javascript" src="js/event-handler/configuration.js"></script>
+    <script type="text/javascript" src="js/event-handler/generator.js"></script>
+    <script src="lib/leaflet-1.5.1/leaflet.js" type="text/javascript"></script>
+    <script src="lib/Leaflet.Easybutton/easy-button.js" type="text/javascript"></script>
+
+</head>
+<body style="height: 100%">
+
+<!-- Start of site -->
+<div class="container-fluid" style=" min-height: 750px; min-width: 1200px; height: 100%;  width:100%">
+
+    <div id="top-line" class="row" style="height: 50px">
+        <nav class="navbar navbar-expand navbar-dark bg-primary" style="height: 100%; width: 100%">
+            <span class="navbar-brand my-center">
+                <img src="img/mylogo.png" alt="LOGO" style="height:40px; width: 40px;">
+                &nbsp;<b>bePREPARED</b>
+            </span>
+
+            <input id="bp-import-config" type="file" accept=".beprepared-configuration" style="display: none;"/>
+            <input id="bp-import-scenario" type="file" accept=".bp_scenario.zip" style="display: none;"/>
+
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" onclick="clickGenerator()" href="#"><i
+                            class="fa fa-cogs"></i>
+                        <span id="generator-btn">Generator</span></a>
+                </li>
+                <li class="nav-item active dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-download"></i> Import
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a id="scenario-dropdown1" class="dropdown-item" href="#" onclick="importScenarioFile()">Szenario</a>
+                        <a id="config-dropdown" class="dropdown-item" href="#" onclick="importConfigFile()">Konfiguration</a>
+                    </div>
+                </li>
+                <li class="nav-item active dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-upload"></i> Export
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a id="scenario-dropdown2" class="dropdown-item" href="#" onclick="exportScenarioFile()">Szenario</a>
+                        <a id="config-dropdown2" class="dropdown-item" href="#" onclick="exportConfigFile()">Konfiguration</a>
+                    </div>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" onclick="discardScenario()" href="#"><i
+                            class="fa fa-trash"></i>
+                        <span id="discardScenario">Szenario verwerfen</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" onclick="clickConfig()" href="#"><i
+                            class="fa fa-cog"></i>
+                        <span id="configurationManagement">Konfigurationsverwaltung</span></a>
+                </li>
+            </ul>
+
+            <span style="color:white; white-space: nowrap" id="curConfigTxt">| Aktuelle Konfiguration:&nbsp;</span>
+            <b>
+                <span id="curConfig" style="color:white">-</span>
+            </b>
+        </nav>
+
+    </div>
+
+    <div style="height: calc(100% - 50px)">
+        <!-- mittlere zeile: karte, dynamisch, tabelle -->
+        <div class="row" style="Height: 55%;">
+
+            <div class="col-4">
+                <div class="map-container align-items-center justify-content-center" id="mapid">
+                    <!-- Map will be inserted here-->
+                </div>
+            </div>
+            <div class="col d-none" id="middlePanel">
+                <h1 class="text-center">bePREPARED</h1>
+            </div>
+            <div class="col align-items-center justify-content-center"
+                 style="overflow:auto; height:100%; margin-top: 12px">
+                <table class="table table-hover" id="mydatatable" style="height: 100%; width: 100%">
+                    <tbody id="table-body"></tbody>
+                    <tfoot>
+                    <th id="filterHeader">Filter:</th>
+                    <th></th>
+                    <th>
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%">
+                            <label class="btn btn-outline-secondary active">
+                                <input type="radio" name="options" id="option1" autocomplete="off"
+                                       onchange="toggleRelative()" checked>
+                                <span id="labeloption1"></span>
+                            </label>
+                            <label class="btn btn-outline-secondary">
+                                <input type="radio" name="options" id="option2" autocomplete="off"
+                                       onchange="toggleAbsolute()">
+                                <span id="labeloption2"></span>
+                            </label>
+                        </div>
+                    </th>
+                    <th></th>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- Zeitstrahl -->
+        <div class="row align-items-center justify-content-center" style="height: 30%;">
+            <div class="col-12" id="visualization">
+                <div class="menu">
+                    <button class="btn btn-outline-primary btn-sm" type="button" id="zoomIn">
+                        <i class="fa fa-search-plus"></i>
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" type="button" id="defaultView">
+                        <b>&#x26F6;</b>
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" type="button" id="zoomOut">
+                        <i class="fa fa-search-minus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- untere Zeile: Phasenauswahl, Knöpfe -->
+        <div class="row align-items-center justify-content-center" style="height: 15%; background-color: #c7caca">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-8">
+                        <label class="form-label" for="xxx"><b id="selectedPhases">Ausgewählte Phasen:</b></label>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label" for="slider"><b id="speedTxt">Geschwindigkeit: </b> x<span
+                                id="bouncy-cat">1</span></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div id="xxx" class="input-group">
+                        <textarea class="form-control" id="phaseSelect" style="resize: none" rows="1"
+                                  readonly></textarea>
+                            <div class="input-group-append">
+                                <button id="bp-btn-phaseselect" class="btn btn-warning" type="button"
+                                        onclick="clickSelectPhases()"
+                                        data-toggle="tooltip" data-placement="top" title="Select phases...">
+                                    <i class="fa fa-th-list"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="my-center" style="width:100%;">
+                            <div id="slider" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn btn-primary btn-block" id="bp-createeventbtn" onclick="clickCreateEvent()">
+                            Ereignis erstellen
+                        </button>
+                        <button class="btn btn-primary btn-block" id="bp-phasebtn" onclick="clickPhaseManagement()">
+                            Phasenverwaltung
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-success btn-block" id="bp-startpausebtn" onclick="clickStartPause()">
+                            Simulation starten
+                        </button>
+                        <button class="btn btn-danger btn-block" id="bp-stopbtn" onclick="clickStop()" disabled>
+                            Stopp
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Placeholder Modal -->
+<div id="modal-placeholder"></div>
+
+<!-- Error Modal -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title"></h5>
+            </div>
+            <div class="modal-body" id="modal-content">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal-loading" tabindex="-1" role="dialog" aria-labelledby="loadingModal"
+     aria-hidden="false" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="img/mylogo.png" class="rotate black" style="max-width: 100%" alt="Loading...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="lib/popper.min.js"></script>
+<script type="text/javascript" src="lib/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="lib/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="lib/datatables-1.10.18/datatables.js"></script>
+<script type="text/javascript" src="js/map.js"></script>
+<script type="text/javascript" src="js/table.js"></script>
+<script type="text/javascript" src="js/time.js"></script>
+<script type="text/javascript" src="lib/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="lib/moment-timezone-with-data.js"></script>
+<script type="text/javascript" src="lib/tether.min.js"></script>
+<script type="text/javascript" src="lib/tempusdominus-bootstrap-4.js"></script>
+<script type="text/javascript" src="lib/vis.min.js"></script>
+<script type="text/javascript" src="js/timeline.js"></script>
+<script type="text/javascript" src="js/event-handler/general.js"></script>
+<script type="text/javascript" src="lib/bootstrap-slider.js"></script>
+
+<!-- init -->
+<script type="text/javascript" src="js/init.js"></script>
+<script type="text/javascript" src="js/indexTranslator.js"></script>
+<script type="text/javascript">
+    var table;
+    var leafletMap;
+    let languageFile = "i18n/";
+    if (navigator.language.includes("de")) {
+        languageFile += "de-DE";
+    } else if (navigator.language.includes("en")) {
+        languageFile += "en-US";
+    }
+    languageFile += ".json";
+    $.ajax(languageFile).done(function (text) {
+        i18n.translator.add(text);
+        translateIndexHtml();
+        table = new BPTable();
+        leafletMap = new LeafletMap('mapid');
+        initialize();
+    });
+</script>
+
+</body>
+</html>

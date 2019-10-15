@@ -1,0 +1,48 @@
+{
+  "name": "Fraunhofer IOSB",
+  "description": "The Fraunhofer IOSB",
+  "properties": {},
+  "Locations": [
+    {
+      "name": "Fraunhofer IOSB location",
+      "description": "The location of Fraunhoferstr. 1",
+      "encodingType": "application/vnd.geo+json",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          8.4259727,
+          49.015308
+        ]
+      }
+    }
+  ],
+  "Datastreams": [
+    {
+      "name": "Temperature Fraunhofer IOSB",
+      "description": "The temperature inside the Fraunhofer IOSB",
+      "observationType": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
+      "unitOfMeasurement": {
+        "name": "Degree Celsius",
+        "symbol": "degC",
+        "definition": "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#DegreeCelsius"
+      },
+      "Sensor": {
+        "name": "temperatureSensor",
+        "description": "a sample temperature sensor",
+        "encodingType": "application/pdf",
+        "metadata": "https://www.sparkfun.com/datasheets/Sensors/Temperature/DHT22.pdf"
+      },
+      "ObservedProperty": {
+        "name": "Temperature",
+        "definition": "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#ThermodynamicTemperature",
+        "description": "The temperature."
+      },
+      "Observations": [
+        {
+          "phenomenonTime": "2019-03-14T10:00:00Z",
+          "result": 21.0
+        }
+      ]
+    }
+  ]
+}

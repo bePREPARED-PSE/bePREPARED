@@ -1,0 +1,10 @@
+# Set line endings to linux line feeds
+* text eol=lf
+# Treat png file not as text:
+*.png binary
+
+# Treat fonts as binary
+*.eot binary
+*.ttf binary
+
+geckodriver binary

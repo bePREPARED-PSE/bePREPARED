@@ -1,0 +1,80 @@
+<!-- Generator Modal -->
+<!-- Config Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-generator">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="generatorTitle" class="modal-title">Generator</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="eventGeneratorForm">
+                <div class="modal-body">
+                    <!--Input fields:-->
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <label id="generatorSelect-label" class="col-form-label"
+                                   for="bp-generatorselect">Generator:</label>
+                        </div>
+                        <div class="input-group col-9">
+                            <select name="generatorselect" class="custom-select" id="bp-generatorselect"
+                                    onchange="onGeneratorChanged()"></select>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="form-group row">
+                        <label class="col-3 control-label" for="eventCount" id="generator-eventCount">
+                            Anzahl der Events:</label>
+                        <div class="col-9">
+                            <input id="eventCount" name="eventCount" type="number" min="0" placeholder="100"
+                                   class="form-control input" required>
+                            <small class="form-text text-muted">=:n</small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-3 control-label" for="eventTimeFunction" id="generator-function-pit">
+                            Zeitpunkt-Funktion (in ms):</label>
+                        <div class="col-9">
+                            <input id="eventTimeFunction" name="eventTimeFunction" type="text" placeholder="x+1"
+                                   class="form-control input" required>
+                            <small id="generatorEventTimeFunctionHint" class="form-text text-muted"></small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <label id="generator-phaseselectlabel" class="col-form-label" for="generator-phaseselect">Phase:</label>
+                            <script type="text/javascript">
+                                $("#generator-phaseselectlabel").text(i18n("Phase") + ":");
+                            </script>
+                        </div>
+                        <div class="col-9">
+                            <select name="phase" class="custom-select" id="generator-phaseselect"></select>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div id="bp-generatorInput">
+                        Loading Input Descriptors...
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary btn-block" id="modal-generator-submit"
+                                onclick="generateEvents()">Bestätigen
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- internationalize this modal -->
+    <script type="text/javascript">
+        $("#generatorTitle").text(i18n("generator"));
+        $("#modal-generator-submit").text(i18n("submit"));
+        $("#generator-function-pit").text(i18n("pitFunction") + ":");
+        $("#generator-eventCount").text(i18n("eventCount") + ":");
+        $("#generatorSelect-label").text(i18n("generator") + ":");
+        $("#generatorEventTimeFunctionHint").text(i18n("generatorEventTimeFunctionHint"));
+    </script>
+</div>

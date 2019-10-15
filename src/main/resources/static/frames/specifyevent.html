@@ -1,0 +1,189 @@
+<div class="row">
+    <div class="col-2"></div>
+
+    <!-- Header of configuration -->
+    <div class="col-8">
+        <h4 id="bp-configevent" class="text-center">Ereignis konfigurieren:</h4>
+        <script type="text/javascript">
+            $("#bp-configevent").text(i18n("configEvent") + ":");
+        </script>
+    </div>
+    <div class="col-2 text-align-center">
+        <button type="button" class="close" aria-label="Close" onclick="util.clickClose()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+</div>
+<br/>
+
+<form id="form" novalidate>
+
+    <!-- Date time picker -->
+    <div class="form-group row">
+        <div class="col-3">
+            <label id="datetimeLabel" class="col-form-label" for="datetime">Zeitpunkt:</label>
+            <script type="text/javascript">
+                $("#datetimeLabel").text(i18n("PointInTime") + ":");
+            </script>
+        </div>
+
+        <div class="col-9">
+            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                <input name="datetime" id="datetime" type="text" class="form-control datetimepicker-input"
+                       data-target="#datetimepicker1" required>
+                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+            <small id="bp-starttime" class="form-text text-muted"></small>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-3"></div>
+        <div class="col-9">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-plus"></i></div>
+                </div>
+                <input id="rd" class="form-control" data-toggle="tooltip" type="number" title="Tage" placeholder="Tage"
+                       oninput="syncDateTime()" min="0" required/>
+                <input id="rh" class="form-control" data-toggle="tooltip" type="number" title="Stunden"
+                       placeholder="Std." oninput="syncDateTime()" min="0" max="23" required/>
+                <input id="rm" class="form-control" data-toggle="tooltip" type="number" title="Minuten"
+                       placeholder="Min." oninput="syncDateTime()" min="0" max="59" required/>
+                <input id="rs" class="form-control" data-toggle="tooltip" type="number" title="Sekunden"
+                       placeholder="Sek." oninput="syncDateTime()" min="0" max="59" required/>
+                <script type="text/javascript">
+                    $("#rd").prop("title", i18n("days"));
+                    $("#rd").prop("placeholder", i18n("days"));
+                    $("#rh").prop("title", i18n("hours"));
+                    $("#rh").prop("placeholder", i18n("hours"));
+                    $("#rm").prop("title", i18n("minutes"));
+                    $("#rm").prop("placeholder", i18n("minutesAbbrev"));
+                    $("#rs").prop("title", i18n("seconds"));
+                    $("#rs").prop("placeholder", i18n("secondsAbbrev"));
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        //Fancy tootlips for relative time picker
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        /**
+         * Sync relative time picker with datetimepicker.
+         */
+        function syncDateTime() {
+            let time;
+            const d = parseInt($('#rd').val()) * 86400000;
+            const h = parseInt($('#rh').val()) * 3600000;
+            const m = parseInt($('#rm').val()) * 60000;
+            const s = parseInt($('#rs').val()) * 1000;
+            time = configRepo.get(currentConfig).scenarioStartTime + d + h + m + s;
+            $('#datetimepicker1').datetimepicker('date', moment(time));
+        }
+
+        //Enable datetimepicker
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                format: 'L LTS',
+                locale: moment.locale(),
+                minDate: moment(configRepo.get(currentConfig).scenarioStartTime),
+                defaultDate: moment(configRepo.get(currentConfig).scenarioStartTime),
+            });
+        });
+
+        /*
+        Event listener: sycn datetime picker with relative time picker
+         */
+        $('#datetimepicker1').on("change.datetimepicker", (e) => {
+            let time = e.date.format('x') - configRepo.get(currentConfig).scenarioStartTime;
+            const date = moment.utc(time);
+            const days = (date.format('x') / 86400000) >> 0;
+            const h = date.hour(), m = date.minute(), s = date.second();
+            $('#rd').val(days);
+            $('#rh').val(h);
+            $('#rm').val(m);
+            $('#rs').val(s);
+        });
+    </script>
+
+    <hr/>
+
+    <!-- Here the input descriptors will be inserted -->
+    <div id="bp-specevent">
+        Loading Input Descriptors...
+    </div>
+    <hr/>
+
+    <!-- Choose and create phase -->
+    <div class="form-group row">
+        <div class="col-3">
+            <label id="bp-phaseselectlabel" class="col-form-label" for="bp-phaseselect">Phase:</label>
+            <script type="text/javascript">
+                $("#bp-phaseselectlabel").text(i18n("Phase") + ":");
+            </script>
+        </div>
+        <div class="input-group col-9">
+            <select name="phase" class="custom-select" id="bp-phaseselect"></select>
+            <div class="input-group-append">
+                <button id="createPhaseButton" class="btn btn-warning" type="button" onclick="clickNewPhase()">Phase
+                    erstellen
+                </button>
+                <script type="text/javascript">
+                    $("#createPhaseButton").text(i18n("createPhase"));
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit button -->
+    <div class="form-group row">
+        <div class="col-12">
+            <button id="createEventButton" type="button" class="btn btn-primary btn-block" onclick="submitEvent(false)">
+                Ereignis erstellen
+            </button>
+            <script type="text/javascript">
+                $("#createEventButton").text(i18n("createEvent"));
+            </script>
+        </div>
+    </div>
+</form>
+
+<!-- Phase Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-phase">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Phase erstellen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label id="modal-phsaename-label" class="form-label" for="modal-phasename">Phasenname:</label>
+                    <input class="form-control" type="text" id="modal-phasename"
+                           placeholder="Phasennamen hier eingeben" required>
+                    <script type="text/javascript">
+                        $("#modal-phsaename-label").text(i18n("phaseName") + ":");
+                        $("#modal-phasename").placeholder = i18n("enterPhaseName");
+                    </script>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-phasename-btn" type="button" class="btn btn-primary" onclick="createPhase()">Erstellen
+                    und schließen
+                </button>
+                <script type="text/javascript">
+                    $("#modal-phasename-btn").text(i18n("createAndClose"));
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
